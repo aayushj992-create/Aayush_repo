@@ -25,5 +25,6 @@ public class DefaultValues
         System.out.println(t1.f);
         System.out.println(t1.g);
         System.out.println(t1.h);
+        //this wouldn't work in a local variable because literals of the local variable should be introduced.
     }
 }
