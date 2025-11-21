@@ -11,8 +11,8 @@ public class LiteralPractice
         long lg=145678903489L;
         float fl=3456.34567f;
         char ch='\u2764';
-        System.out.println("The long value is:"+lg);
-        System.out.println("The float value is:"+fl);
-        System.out.println("The char value is:"+ch);
+        System.out.println("The Long value is:"+lg);
+        System.out.println("The Float value is:"+fl);
+        System.out.println("The Symbol is:"+ch);
     }
 }
