@@ -39,7 +39,7 @@ public class MathOperations
         boolean less=(a<=b);
         System.out.println("a<=b:"+less);
         boolean great=(a>b);
-        System.out.println("a>b:"+less);
+        System.out.println("a>b:"+great);
         boolean lesser=(a<b);
         System.out.println("a<b:"+lesser);
         boolean not=(a!=b);
