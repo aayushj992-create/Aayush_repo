@@ -48,7 +48,7 @@ public class RickshawFare
         boolean check=(Dis==local_check);
         int Total_fare=(check==true)?(price-discount):(price+surcharge);
         System.out.println("=======================");
-        System.out.println("Your Total Fare is:"+Total_fare);
+        System.out.println("Your Total Fare is:Rs."+Total_fare);
         System.out.println("=======================");
     }
 }
