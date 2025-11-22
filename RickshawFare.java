@@ -10,6 +10,7 @@ public class RickshawFare
 {
     public static void main(String[] args){
         int base_fare=20;
+        
         int per_kilometer_charge=2;
         int per_minute_charge=2;
         int surcharge=100;
@@ -42,10 +43,9 @@ public class RickshawFare
         System.out.println("Are You a Local?Write 1 if Yes or 0 if No.:");
         Scanner local=new Scanner(System.in);
         int Dis=local.nextInt();
-        int a=1;
-        boolean b=(Dis==a);
-        System.out.println(b);
-        int Total_fare=(b==true)?(price-discount):(price+surcharge);
+        int local_check=1;
+        boolean check=(Dis==local_check);
+        int Total_fare=(check==true)?(price-discount):(price+surcharge);
         System.out.println("=======================");
         System.out.println("Your Total Fare is:"+Total_fare);
         System.out.println("=======================");
