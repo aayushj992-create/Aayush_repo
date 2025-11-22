@@ -21,6 +21,7 @@ public class RickshawFare
         System.out.println("The per_kilometer_charge is:Rs"+per_kilometer_charge);
         System.out.println("The per_minute_charge is:Rs"+per_minute_charge);
         System.out.println("The surcharge is:Rs"+surcharge);
+        System.out.println("The discount is:Rs"+discount);
         System.out.println("---------------------------------");
         Scanner scan=new Scanner(System.in);
         //Distance fare 
