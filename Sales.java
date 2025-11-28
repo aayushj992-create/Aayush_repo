@@ -15,19 +15,19 @@ public class Sales
         System.out.println("Enter MP:");
         float Mp=scan.nextFloat();
         if(catagory=='A'){
-            float Sp=Mp-Mp*0.60f;
+            float Sp=Mp-(Mp*0.60f);
             System.out.println("Your selling price is:"+Sp);
         }
         else if(catagory=='B'){
-            float Sp=Mp-Mp*0.40f;
+            float Sp=Mp-(Mp*0.40f);
             System.out.println("Your selling price is:"+Sp);
         }
         else if(catagory=='C'){
-            float Sp=Mp-Mp*0.20f;
+            float Sp=Mp-(Mp*0.20f);
             System.out.println("Your selling price is:"+Sp);
         }
         else if(catagory=='D'){
-            float Sp=Mp-Mp*0.10f;
+            float Sp=Mp-(Mp*0.10f);
             System.out.println("Your selling price is:"+Sp);
         }  
         else{
