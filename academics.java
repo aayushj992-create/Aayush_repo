@@ -16,9 +16,10 @@ public class academics
         float Attendance=scan.nextFloat();
         System.out.println("Enter Attitude");
         int Attitude=scan.nextInt();
-        if(GPA>=0.0 && GPA<=4.0){
-        if(GPA>=3.2)
-        {
+    if(GPA>=0.0 && GPA<=4.0)
+    {
+            if(GPA>=3.2)
+            {
             if(Attendance>0.80)
             {
                 if(Attitude<5)
@@ -40,11 +41,12 @@ public class academics
                     System.out.println("You have low GPA");
                 }
               
-            }
-             else 
+        
+    }
+    else 
                 {
                     System.out.println("You are not Eligible for Scholarship");
                 }
-         }
+    }
         }
         

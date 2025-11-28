@@ -16,15 +16,18 @@ public class if_divisible_3_5
         { 
             if(num%5==0){
             System.out.println("It is divisible by both");
+        }
+            else
             {
-                System.out.println("It is not divisible by both");
+                System.out.println("It is  divisible by 3 only");
             }
         }
-        if(num%5==0)
+        else if(num%5==0)
             {
                 System.out.println("It is divisble by 5 only");
             }
-            System.out.println("It is divisible by 3 only");
+            else{
+            System.out.println("It is not divisible by both");
         }
     }
 }
