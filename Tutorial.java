@@ -25,9 +25,11 @@ public class Tutorial
        short st=10;
        short str=11;
     short tyu=(short)(st+str);
+    System.out.println(tyu);
     byte a=23;
     byte b=76;
     byte abb=(byte)(a+b);
+    System.out.println(abb);
     System.out.println(Byte.MAX_VALUE);
     System.out.println(Byte.MIN_VALUE);
     System.out.println(Byte.SIZE);

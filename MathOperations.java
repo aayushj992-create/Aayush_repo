@@ -32,6 +32,7 @@ public class MathOperations
         int c=10;
         System.out.println("The value of c is:"+c);
         //Relational
+        System.out.println(a==b);
         boolean same=(a==b);
         System.out.println("a==b:"+same);
         boolean greater_than=(a>=b);
