@@ -22,6 +22,7 @@ public class laptop
         {
         System.out.println(brand);
         System.out.println(ram);
-        System.out.println(price);}
+        System.out.println(price);
+    }
     }
 }

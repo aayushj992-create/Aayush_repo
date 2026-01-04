@@ -7,7 +7,7 @@
  */
 public class Tutorial
 {
-    int agr;
+    int agr=3;
     static int rtr;
     public static void main(String[] args){
         int age=18;

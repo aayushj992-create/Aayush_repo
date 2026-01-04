@@ -12,7 +12,7 @@ public class Rectangle
     int length;
     int breadth;
     
-    void area()
+    public void area()
     {
         System.out.println("Area of rectangle is: "+ (length * breadth));
     }

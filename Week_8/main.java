@@ -26,6 +26,7 @@ public class main
         System.out.println(Calculator.square(10));
         Car c1=new Car();
         Car c2=new Car("green");
+        
         Car c3=new Car(104);
         Car c4=new Car("yellow",105);
         
