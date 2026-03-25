@@ -1,4 +1,6 @@
 package Coursework;
+import java.awt.*;
+import javax.swing.*;
 
 
 /**
@@ -7,6 +9,7 @@ package Coursework;
  * @author (your name)
  * @version (a version number or a date)
  */
-public class SubscriptionGUI
+public class SubscriptionGUI extends JFrame 
 {
+    
 }

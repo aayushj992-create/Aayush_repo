@@ -4,17 +4,17 @@ package Coursework;
 /**
  * Write a description of class PersonalPlan here.
  *
- * @author (your name)
+ * @author (Aayush Joshi)
  * @version (a version number or a date)
  */
 public class PersonalPlan extends AIModel
 {
     private int remainingPrompts;
-    public PersonalPlan(String modelName,double price,int parameterCount,String contextWindow,int remainingPrompts)
+    public PersonalPlan(String modelName,double price,int parameterCount,int contextWindow,int remainingPrompts)
     {
         super(modelName, price,parameterCount,contextWindow);
         this.remainingPrompts=remainingPrompts;
-    }
+    }   
     
     //Accessor for remainingPrompts
     public int getRemainingPrompts()
@@ -25,35 +25,40 @@ public class PersonalPlan extends AIModel
     //Method for additional prompts
     public String purchasePrompts(int additionalPrompts)
     {
-        if(additionalPrompts<0)
+        if(additionalPrompts>0)
         {
-            return "You need to upgrade to Pro Plan";
+            remainingPrompts+=additionalPrompts;
+            return "Successfully added "+additionalPrompts+" prompts"+" Now your total prompts remaining are:"+remainingPrompts;
         }
         else
         {
-            remainingPrompts+=additionalPrompts;
-            return "Successfully added"+additionalPrompts+"prompts"+"Now your total prompts remaining are:"+remainingPrompts;
+            return "Please enter positive value or you need to upgrade to Pro Plan";
         }
     }
     
-    //Method
-    public String userPrompts(String promptText,int expectedLength)
+    //Method for userPrompts
+    public String usePrompt(String promptText, int expectedLength)
     {
-    if(remainingPrompts>0)
+    if (remainingPrompts <= 0)                            
     {
-        remainingPrompts-=1;
-        return "Prompt text:"+promptText+"\nExpected output length:"+expectedLength+"\nPrompts Remaining"+remainingPrompts;
+        return "Error: Monthly quota exhausted.";
+    }
+    if (super.calculateTokenUsage(promptText, expectedLength)==false)
+    {
+        return "Error: Context limit exceeded.";    
     }
     else
     {
-        return"Your monthly quota has been reached";
+    remainingPrompts -= 1;                                
+    return "Prompt accepted. Prompts remaining: " + remainingPrompts; 
     }
-}
-
+    }
+    
     //Overriding the to string method
     @Override
-    public String toString()
+    public String display()
     {
-        return super.toString()+"Remaning Prompts:"+getRemainingPrompts();
+        return "Model Name:"+getModelName()+"\nPrice:"+getPrice()+"\nParameter Count:"+getParameterCount()
+        +"\nContext Window:"+getContextWindow()+"\nRemaning Prompts:"+getRemainingPrompts();
     }
 }

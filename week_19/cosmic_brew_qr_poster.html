@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cosmic Brew — QR Poster</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#03060F;color:#EDE8D8;font-family:'Crimson Pro',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px}
+  .poster{background:linear-gradient(160deg,#0D1535,#07102A);border:2px solid rgba(201,169,110,.4);border-radius:28px;padding:48px 40px;max-width:460px;width:100%;text-align:center;box-shadow:0 0 60px rgba(201,169,110,.08),inset 0 1px 0 rgba(201,169,110,.15)}
+  .stars-deco{font-size:28px;letter-spacing:8px;color:rgba(201,169,110,.5);margin-bottom:8px}
+  h1{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:#C9A96E;letter-spacing:.12em;text-shadow:0 0 30px rgba(201,169,110,.4);margin-bottom:4px}
+  .tagline{font-size:16px;font-style:italic;color:rgba(237,232,216,.6);margin-bottom:32px}
+  .qr-container{background:white;border-radius:16px;padding:16px;display:inline-block;margin-bottom:28px;box-shadow:0 0 40px rgba(201,169,110,.2)}
+  #qr-canvas{display:block}
+  .instruction{background:rgba(201,169,110,.08);border:1px solid rgba(201,169,110,.2);border-radius:12px;padding:18px 20px;margin-bottom:24px}
+  .instruction p{font-size:15px;line-height:1.7;color:rgba(237,232,216,.85)}
+  .instruction strong{color:#C9A96E;font-weight:600}
+  .features{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+  .feat{background:rgba(124,111,232,.1);border:1px solid rgba(124,111,232,.2);border-radius:20px;padding:6px 14px;font-size:13px;color:#C47BE8}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(201,169,110,.3),transparent);margin:24px 0}
+  .url-box{background:rgba(0,0,0,.3);border:1px solid rgba(201,169,110,.15);border-radius:8px;padding:10px 16px;font-family:monospace;font-size:13px;color:rgba(201,169,110,.7);word-break:break-all;margin-bottom:8px}
+  .print-btn{margin-top:20px;padding:12px 32px;background:linear-gradient(135deg,#C9A96E,#E8D4A0);color:#03060F;border:none;border-radius:10px;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.1em;font-weight:700;cursor:pointer}
+  .print-btn:hover{opacity:.9}
+  .note{font-size:12px;color:rgba(138,143,170,.7);margin-top:12px;line-height:1.6}
+  @media print{body{background:white}.poster{border:2px solid #C9A96E;box-shadow:none}.print-btn,.note{display:none}}
+</style>
+</head>
+<body>
+
+<div class="poster">
+  <div class="stars-deco">✦ ✦ ✦</div>
+  <h1>The Cosmic Brew</h1>
+  <p class="tagline">where the stars choose your cup</p>
+
+  <div class="qr-container">
+    <canvas id="qr-canvas" width="200" height="200"></canvas>
+  </div>
+
+  <div class="instruction">
+    <p>📱 <strong>Scan & discover your perfect brew!</strong><br>
+    Tell us your birthday — the stars will reveal your ideal tea or coffee and create your personal loyalty card.</p>
+  </div>
+
+  <div class="features">
+    <span class="feat">☕ Personalised Brew</span>
+    <span class="feat">♈ Zodiac Reading</span>
+    <span class="feat">💳 Loyalty Card</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="url-box" id="urlDisplay">Open the HTML file on a device, share the link, or host it online</div>
+  <div class="note">
+    💡 <strong>To make the QR code work:</strong> Host the <code>cosmic_brew_tea_stall.html</code> file online (e.g. on GitHub Pages, Netlify, or any web host), then enter the URL below to regenerate this QR code.
+  </div>
+
+  <input type="text" id="urlInput" placeholder="Paste your hosted URL here…" style="width:100%;margin-top:16px;padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(201,169,110,.25);border-radius:8px;color:#EDE8D8;font-size:14px;font-family:inherit;outline:none" oninput="generateQR(this.value)">
+
+  <button class="print-btn" onclick="window.print()">🖨 Print This Poster</button>
+</div>
+
+<script>
+// Minimal QR code generator (uses Google Charts API as fallback, or manual)
+function generateQR(url) {
+  if (!url || url.length < 5) {
+    drawPlaceholder();
+    document.getElementById('urlDisplay').textContent = 'Paste your hosted URL above';
+    return;
+  }
+  document.getElementById('urlDisplay').textContent = url;
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}&bgcolor=ffffff&color=03060F&margin=8`;
+  img.onload = () => {
+    const c = document.getElementById('qr-canvas');
+    const ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, 200, 200);
+    ctx.drawImage(img, 0, 0, 200, 200);
+  };
+  img.onerror = () => drawPlaceholder();
+}
+
+function drawPlaceholder() {
+  const c = document.getElementById('qr-canvas');
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#f0f0f0';
+  ctx.fillRect(0, 0, 200, 200);
+  ctx.fillStyle = '#333';
+  ctx.font = '13px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Paste your URL above', 100, 90);
+  ctx.fillText('to generate QR code', 100, 112);
+  // Draw decorative QR-like pattern
+  ctx.fillStyle = '#ccc';
+  [[20,20,40,40],[140,20,40,40],[20,140,40,40]].forEach(([x,y,w,h])=>{
+    ctx.strokeStyle='#999';ctx.lineWidth=2;ctx.strokeRect(x,y,w,h);
+    ctx.strokeRect(x+6,y+6,w-12,h-12);
+    ctx.fillRect(x+10,y+10,w-20,h-20);
+  });
+}
+drawPlaceholder();
+</script>
+</body>
+</html>

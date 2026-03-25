@@ -1,34 +1,34 @@
-package Coursework;
+    package Coursework;
 
 
 /**
  * Write a description of class ProPlan here.
  *
- * @author (your name)
+ * @author (Aayush Joshi)
  * @version (a version number or a date)
  */
 public class ProPlan extends AIModel
 {
-    private int slots;
-    public ProPlan(String modelName,double price,int parameterCount,String contextWindow,int slots)
+    private  int slotsAvailable;
+    public ProPlan(String modelName,double price,int parameterCount,int contextWindow,int slotsAvailable)
     {
         super(modelName, price,parameterCount,contextWindow);
-        this.slots=slots;
+        this.slotsAvailable=slotsAvailable;
     }
     
-    //Getter Setter for slots
+    //Accessor for slots
     public int getSlots()
     {
-       return this.slots; 
+       return this.slotsAvailable; 
     }
     
-    //Method for Adding team
-    public String addTeam(String memberName)
+    //Method for Adding team meamber
+    public String addTeamMember(String memberName)
     {
-        if(slots>0)
+        if(slotsAvailable>0)
         {
-           slots--;
-           return "Team member:"+memberName+"added successfully."+"\nAvailable Slots Remaining:" + slots;  
+           slotsAvailable--;
+           return "Team member:"+memberName+" added successfully."+"\nAvailable Slots Remaining:" + slotsAvailable;  
         }
         else
         {
@@ -36,12 +36,30 @@ public class ProPlan extends AIModel
         }
     }
     
-    //Method
+    //Method to remove team member
+    public String removeTeamMember(String memberName)
+    {
+        slotsAvailable++;
+        return "Team member:"+memberName+" removed successfully."+"\nAvailable Slots Remaining:" + slotsAvailable; 
+    }
+    
+    public String usePrompt (String userText,int outputTokens)
+    {
+        if (super.calculateTokenUsage(userText,outputTokens)==false)
+    {
+        return "Error: Context limit exceeded."; 
+    }
+    else
+    {                        
+    return "Success your prompt was accepted.";
+    }
+    }
     
     //Overriding the to string method
     @Override
-    public String toString()
+    public String display()
     {
-        return super.toString()+"Remaning Prompts:"+getSlots();
+        return "Model Name:"+getModelName()+"\nPrice:"+getPrice()+"\nParameter Count:"+getParameterCount()
+        +"\nContext Window:"+getContextWindow()+"\nAvailable Team Slots: " + getSlots();
     }
 }

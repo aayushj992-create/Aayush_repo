@@ -4,18 +4,18 @@ package Coursework;
 /**
  * Write a description of class AIModel here.
  *
- * @author (your name)
+ * @author (Aayush Joshi)
  * @version (a version number or a date)
  */
-public class AIModel
+public abstract class AIModel
 {
     private String modelName;
     private double price;
     private int parameterCount;
-    private String contextWindow;
+    private int contextWindow;
     
     //Constructor of AIModel
-    public AIModel(String modelName,double price,int parameterCount,String contextWindow)
+    public AIModel(String modelName,double price,int parameterCount,int contextWindow)
     {
         this.modelName=modelName;
         this.price=price;
@@ -23,52 +23,37 @@ public class AIModel
         this.contextWindow=contextWindow;
     }
     
-    //Getter Setter for modelName
-    public void setModelName(String modelName)
-    {
-        this.modelName=modelName;
-    }
+    //Accessor for modelName
     public String getModelName()
     {
        return this.modelName; 
     }
     
-    //Getter Setter for price
-    public void setPrice(double price)
-    {
-        this.price=price;
-    }
+    //Accessor for price
     public double getPrice()
     {
        return this.price; 
     }
     
-    //Getter Setter for paramenterCount
-    public void setParameterCount(int parameterCount)
-    {
-        this.parameterCount=parameterCount;
-    }
+    //Accessor for paramenterCount
     public int getParameterCount()
     {
        return this.parameterCount; 
     }
     
-    //Getter Setter for contextWindow
-    public void setContextWindow(String contextWindow)
-    {
-        this.contextWindow=contextWindow;
-    }
-    public String getContextWindow()
+    //Accessor for contextWindow
+    public int getContextWindow()
     {
        return this.contextWindow; 
     }
     
-    //To string Method
-    @Override
-    public String toString()
+    public boolean calculateTokenUsage(String userText,int outputTokens)
     {
-        return "Name of AI model:"+getModelName()+"\nPricing:"+getPrice()+"\nParameters count:"+getParameterCount()+
-        "\nContext Window Size:"+getContextWindow();
+        int inputTokens=userText.length()/4;
+        final int systemTokens=100;     
+        int totalTokens=inputTokens+outputTokens+systemTokens;
+        return totalTokens<=getContextWindow();
     }
-    
+    //Abstract display method
+    public abstract String display();
 }
