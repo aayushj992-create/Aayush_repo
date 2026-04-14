@@ -34,6 +34,7 @@ public class q4 extends JFrame
         label1.setBounds(250,100,300,80);
         label1.setFont(new Font("Times New Roman",Font.BOLD,30));
         add(label1);
+        
         setVisible(true);
     }
     public static void main(String[] args){

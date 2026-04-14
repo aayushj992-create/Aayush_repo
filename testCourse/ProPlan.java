@@ -1,5 +1,4 @@
-package Coursework;
-import java.util.ArrayList;
+    package testCourse;
 
 
 /**
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 public class ProPlan extends AIModel
 {
     private  int slotsAvailable;
-    private ArrayList<String> member;
     public ProPlan(String modelName,double price,int parameterCount,int contextWindow,int slotsAvailable)
     {
         super(modelName, price,parameterCount,contextWindow);
@@ -30,7 +28,6 @@ public class ProPlan extends AIModel
         if(slotsAvailable>0)
         {
            slotsAvailable--;
-           member.add(memberName);
            return "Team member:"+memberName+" added successfully."+"\nAvailable Slots Remaining:" + slotsAvailable;  
         }
         else
@@ -42,7 +39,7 @@ public class ProPlan extends AIModel
     //Method to remove team member
     public String removeTeamMember(String memberName)
     {
-        slotsAvailable++;   
+        slotsAvailable++;
         return "Team member:"+memberName+" removed successfully."+"\nAvailable Slots Remaining:" + slotsAvailable; 
     }
     

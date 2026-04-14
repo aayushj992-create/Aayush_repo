@@ -109,6 +109,7 @@ public class RegestrationForm extends JFrame
     Object[][] data = {{"101", "John Doe", "Male", "Java", "BIT"},{"102", "Jane Smith", "Female", "Python", "Bsc"}};
        
     JTable table=new JTable(data,column);
+    
     JScrollPane scroll=new JScrollPane(table);
     scroll.setBounds(20, 360, 840, 200);
     add(scroll);

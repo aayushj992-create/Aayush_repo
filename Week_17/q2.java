@@ -2,6 +2,7 @@ package Week_17;
 import javax.swing.JFrame;
 import java.awt.*;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 /**
  * Write a description of class q2 here.
@@ -16,7 +17,7 @@ public class q2 extends JFrame
     setSize(800,300);
     setLocationRelativeTo(null);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setLayout(null);
+    
     
     
     JLabel label=new JLabel();
@@ -28,8 +29,10 @@ public class q2 extends JFrame
     Container c=getContentPane();
     c.setBackground(new Color(177,200,230));
     
+    JTextArea text=new JTextArea(5,30);
+    text.setLineWrap(true);
     
-    
+    add(text);
     setResizable(false);
     setVisible(true);
     }

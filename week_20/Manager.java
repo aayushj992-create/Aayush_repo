@@ -1,4 +1,4 @@
-package week_20;
+    package week_20;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -224,6 +224,8 @@ public class Manager extends JFrame
         taskListPanel.repaint();
     }
 
+    
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
