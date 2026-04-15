@@ -23,7 +23,7 @@ public class SubscriptionGUI extends JFrame
     private JTextField userField;
 
     private JTextField personalModelField, personalPriceField, personalParameterField, personalQuotaField,
-            personalContextField, personalPromptTextField, personalResponseField, personalIndexField,promptCount;
+            personalContextField, personalPromptField, personalResponseField, personalIndexField,promptCount;
 
     private JButton addTeamMember, removeTeamMember, displayAll, clear,
             personalBtn, proBtn, checkType;
@@ -173,7 +173,7 @@ public class SubscriptionGUI extends JFrame
         focus(personalIndexField, "Index");
 
         checkType = new JButton("Check Plan Type");
-        checkType.addActionListener(e -> checkType(personalIndexField.getText()));
+        checkType.addActionListener(e -> checkType(personalIndexField));
         
         btnDesign(checkType);
         btnHover(checkType);
@@ -205,14 +205,14 @@ public class SubscriptionGUI extends JFrame
 
         personalModelField = new JTextField(20);
         personalPriceField = new JTextField(20);
-        personalPriceField.setText("10000");
+        personalPriceField.setText("2999");
         personalPriceField.setEditable(false);
         personalPriceField.setBackground(Color.WHITE);
 
         personalParameterField = new JTextField(20);
         personalContextField = new JTextField(20);
         personalQuotaField = new JTextField(20);
-        personalPromptTextField = new JTextField(20);
+        personalPromptField = new JTextField(20);
         personalResponseField = new JTextField(20);
 
         centerPanel.add(createPanel("Model Name:", personalModelField));
@@ -228,12 +228,15 @@ public class SubscriptionGUI extends JFrame
         centerPanel.add(createPanel("Prompt Quota:", personalQuotaField));
         personalQuotaField.setText("Enter Personal Quota");
         focus(personalQuotaField, "Enter Personal Quota");
-        centerPanel.add(createPanel("Prompt Text:", personalPromptTextField));
-        personalPromptTextField.setText("Enter Prompt Text");
-        focus(personalPromptTextField, "Enter Prompt Text");
+        centerPanel.add(createPanel("Prompt Text:", personalPromptField));
+        personalPromptField.setText("Enter Prompt Text");
+        focus(personalPromptField, "Enter Prompt Text");
         centerPanel.add(createPanel("Response Length:", personalResponseField));
         personalResponseField.setText("Enter Response Length");
         focus(personalResponseField, "Enter Response Length");
+        JButton promptBtn=new JButton("Use Prompt");
+        centerPanel.add(promptBtn);
+        promptBtn.addActionListener(e->prompt(personalIndexField));
 
         btnPanel = new JPanel();
         btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.X_AXIS));
@@ -263,9 +266,13 @@ public class SubscriptionGUI extends JFrame
         promptCount = new JTextField(3);
         promptCount.setText("");
         promptCount.setEditable(false);
+        JButton buyPrompt=new JButton("Buy Prompt");
+        
+        
 
         rightPanel.add(remainingPrompts);
         rightPanel.add(promptCount);
+        rightPanel.add(buyPrompt);
         personalmainPanel.add(rightPanel, BorderLayout.EAST);
 
         /* ---------------- FOOTER (PERSONAL) ---------------- */
@@ -277,9 +284,9 @@ public class SubscriptionGUI extends JFrame
         footerPanel.add(footerText);
         personalmainPanel.add(footerPanel, BorderLayout.SOUTH);
 
-        /* ============ PRO PLAN SETUP ============ */
+        
 
-        /* ---------------- HEADER (PRO) ---------------- */
+        /* ---------------- HEADER  ---------------- */
 
         topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.setPreferredSize(new Dimension(0,80));
@@ -295,7 +302,7 @@ public class SubscriptionGUI extends JFrame
         topPanel.add(headText);
         promainPanel.add(topPanel, BorderLayout.NORTH);
 
-        /* ---------------- LEFT PANEL (PRO) ---------------- */
+        /* ---------------- LEFT ---------------- */
 
         leftPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         leftPanel.setPreferredSize(new Dimension(180,0));
@@ -308,7 +315,7 @@ public class SubscriptionGUI extends JFrame
         focus(proIndexField, "Index");
 
         checkType = new JButton("Check Plan Type");
-        checkType.addActionListener(e -> checkType(proIndexField.getText()));
+        checkType.addActionListener(e -> checkType(proIndexField));
         
         btnDesign(checkType);
         btnHover(checkType);
@@ -331,7 +338,7 @@ public class SubscriptionGUI extends JFrame
         leftPanel.add(clear);
         promainPanel.add(leftPanel, BorderLayout.WEST);
 
-        /* ---------------- CENTER PANEL (PRO) ---------------- */
+        /* ---------------- CENTER ---------------- */
 
         proCenterPanel = new JPanel();
         proCenterPanel.setLayout(new BoxLayout(proCenterPanel, BoxLayout.Y_AXIS));
@@ -385,7 +392,7 @@ public class SubscriptionGUI extends JFrame
         proCenterPanel.add(btnPanel);
         promainPanel.add(proCenterPanel, BorderLayout.CENTER);
 
-        /* ---------------- RIGHT PANEL (PRO) ---------------- */
+        /* ---------------- RIGHT  ---------------- */
 
         proRightPanel = new JPanel(new FlowLayout());
         proRightPanel.setPreferredSize(new Dimension(280,0));
@@ -428,7 +435,7 @@ public class SubscriptionGUI extends JFrame
 
         promainPanel.add(proRightPanel, BorderLayout.EAST);
 
-        /* ---------------- FOOTER (PRO) ---------------- */
+        /* ---------------- FOOTER ---------------- */
 
         footerPanel = new JPanel(new FlowLayout());
         footerPanel.setBackground(new Color(30,30,30));
@@ -448,36 +455,53 @@ public class SubscriptionGUI extends JFrame
         setVisible(true);
     }
 
-    public void checkType(String index)
+    public void prompt(JTextField field)
     {
-        try
-        {
-            if(index.isEmpty() || index.equals("Index"))
-            {
-                JOptionPane.showMessageDialog(this, "Please enter an index number");
-                return;
-            }
-            int idx = Integer.parseInt(index);
-            if(idx < 0 || idx >= plan.size())
-            {
-                JOptionPane.showMessageDialog(this, "Index out of range. Valid range: 0 to " + (plan.size() - 1));
-                return;
-            }
-            AIModel ai = plan.get(idx);
-            if(ai instanceof ProPlan)
-            {
-                JOptionPane.showMessageDialog(this, "Pro Plan");
-            }
-            else if(ai instanceof PersonalPlan)
-            {
-                JOptionPane.showMessageDialog(this, "Personal Plan");
-            }
-        }
-        catch(NumberFormatException e)
-        {
-            JOptionPane.showMessageDialog(this, "Index must be a valid number");
-        }
+        
+       int index=getIndex(field);
+       if(index!=-1)
+       {
+           AIModel model=plan.get(index);
+           if(model instanceof PersonalPlan)
+           {
+               PersonalPlan personalModel=(PersonalPlan) model;
+               String promptText=personalPromptField.getText();
+               int expectedLength=Integer.parseInt(personalResponseField.getText());
+               JOptionPane.showMessageDialog(this,personalModel.usePrompt(promptText,expectedLength));
+                
+                promptCount.setText(Integer.toString(personalModel.getRemainingPrompts()));
+                
+           }
+           
+       }
     }
+    
+    public void checkType(JTextField field)
+    {
+            int idx=getIndex(field);
+            if(idx!=-1)
+            {
+            
+                AIModel ai=plan.get(idx);
+                
+                    
+                if(ai instanceof ProPlan)
+                {
+                    JOptionPane.showMessageDialog(this, "Pro Plan");
+                }
+                else if(ai instanceof PersonalPlan)
+                {
+                    JOptionPane.showMessageDialog(this, "Personal Plan");
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(this,"Unknown Plan Type");
+                }
+            }
+        
+            
+    }
+            
 
     public void proDisplayAll()
     {
@@ -579,6 +603,15 @@ public class SubscriptionGUI extends JFrame
             int slots = Integer.parseInt(slotsRemainingField.getText());
             int newValue = slots - 1;
             slotsRemainingField.setText(Integer.toString(newValue));
+            
+            int index=getIndex(proIndexField);
+            AIModel model=plan.get(index);
+            if(model instanceof ProPlan)
+            {
+                ProPlan proModel=(ProPlan) model;
+                String addMember=proMemberField.getText();
+                JOptionPane.showMessageDialog(this,proModel.addTeamMember(addMember));
+            }
         }
         else
         {
@@ -667,25 +700,27 @@ public class SubscriptionGUI extends JFrame
 
     public void personalClearText()
     {
-        personalModelField.setText("");
-        personalParameterField.setText("");
-        personalContextField.setText("");
-        personalQuotaField.setText("");
-        personalPromptTextField.setText("");
-        personalResponseField.setText("");
+        personalModelField.setText("Enter Model Name");
+        personalParameterField.setText("Enter Parameter Count");
+        personalContextField.setText("Enter Context Window");
+        personalQuotaField.setText("Enter Personal Quota");
+        personalPromptField.setText("Enter Prompt Text");
+        personalResponseField.setText("Enter Response Length");
         promptCount.setText("");
+        personalIndexField.setText("Index");
     }
 
     public void proClearText()
     {
-        proModelField.setText("");
-        proParameterField.setText("");
-        proContextField.setText("");
-        proSlotField.setText("");
-        proPromptTextField.setText("");
-        proResponseField.setText("");
-        proMemberField.setText("");
+        proModelField.setText("Enter Model Name");
+        proParameterField.setText("Enter Parameter Count");
+        proContextField.setText("Enter Context Window");
+        proSlotField.setText("Enter Slots");
+        proPromptTextField.setText("Enter Prompt Text");
+        proResponseField.setText("Enter Response Length");
+        proMemberField.setText("Enter Name");
         slotsRemainingField.setText("");
+        proIndexField.setText("Index");
     }
 
     public void addProMember()
@@ -704,9 +739,9 @@ public class SubscriptionGUI extends JFrame
                 throw new Exception("Please Enter all fields");
             }
             
-            if(name.isEmpty())
+            if(name.isEmpty() || !name.matches("[a-zA-z0-9\\-]+"))
             {
-                throw new Exception("Please Enter Model Name");
+                throw new Exception("Please Enter Valid Model Name");
             }
             if(!isValidInteger(parameter))
             {
@@ -791,11 +826,17 @@ public class SubscriptionGUI extends JFrame
     }
 
     
-    public int getIndex(String index)
+    public int getIndex(JTextField field)
     {
+        int index=-1;
+        
         try
         {
-            int idx = Integer.parseInt(index);
+            if(field.getText().equals("Index") || field.getText().isEmpty())
+            {
+                throw new Exception("Enter an index");
+            }
+            int idx = Integer.parseInt(field.getText());
             if(idx < 0)
             {
                 throw new Exception("Please Enter valid index");

@@ -16,6 +16,7 @@ public class ProPlan extends AIModel
     {
         super(modelName, price,parameterCount,contextWindow);
         this.slotsAvailable=slotsAvailable;
+        this.member=new ArrayList<>();
     }
     
     //Accessor for slots

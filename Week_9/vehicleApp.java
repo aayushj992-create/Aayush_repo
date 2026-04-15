@@ -10,7 +10,9 @@ package Week_9;
 public class vehicleApp
 {
    public static void main(String[] args){
-       car c1=new car(1,"URUS",99999,4,"Disel");
+       car c1=new car();
+       c1.vehicleId(1);
+       
        bike b1=new bike(12,"Splendor",25000,500);
        c1.displaycarInfo();
    }
