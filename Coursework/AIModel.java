@@ -64,12 +64,25 @@ public abstract class AIModel
         this.contextWindow=contextWindow;
     }
     
-    public boolean calculateTokenUsage(String userText,int outputTokens)
+    public int calculateTokenUsage(String inputText, int expectedOutputToken) 
     {
-        int inputTokens=userText.length()/4;
-        final int systemTokens=100;     
-        int totalTokens=inputTokens+outputTokens+systemTokens;
-        return totalTokens<=getContextWindow();
+    if (inputText == null) {
+        throw new IllegalArgumentException("inputToken must not be null");
+    }
+
+    String[] text = inputText.split(" ");
+    int inputTokens = (text.length + 3) / 4;  
+    final int SYSTEM_TOKENS = 10;
+
+    int totalTokens = inputTokens + SYSTEM_TOKENS + expectedOutputToken;
+
+    if (totalTokens > getContextWindow()) {
+        throw new IllegalArgumentException(
+            "Error: total tokens (" + totalTokens + ") exceeds context window (" + getContextWindow() + ")"
+        );
+    }
+
+    return totalTokens;   
     }
     //Abstract display method
     public abstract String display();

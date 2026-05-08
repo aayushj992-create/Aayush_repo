@@ -9,26 +9,32 @@ package Coursework;
  */
 public class PersonalPlan extends AIModel
 {
-    private int remainingPrompts;
-    public PersonalPlan(String modelName,double price,int parameterCount,int contextWindow,int remainingPrompts)
+    private int availableTokens;
+    public PersonalPlan(String modelName,double price,int parameterCount,int contextWindow,int availableTokens)
     {
         super(modelName, price,parameterCount,contextWindow);
-        this.remainingPrompts=remainingPrompts;
+        this.availableTokens=availableTokens;
     }   
     
     //Accessor for remainingPrompts
-    public int getRemainingPrompts()
+    public int getAvailableTokens()
     {
-       return this.remainingPrompts; 
+       return this.availableTokens; 
     }
     
-    //Method for additional prompts
-    public String purchasePrompts(int additionalPrompts)
+    public void setavailbaleTokens(int availableTokens)
     {
-        if(additionalPrompts>0)
+        this.availableTokens=availableTokens;
+    }
+    
+    
+    //Method for additional prompts
+    public String purchaseTokens(int additionalTokens)
+    {
+        if(additionalTokens>0)
         {
-            remainingPrompts+=additionalPrompts;
-            return "Successfully added "+additionalPrompts+" prompts"+" Now your total prompts remaining are:"+remainingPrompts;
+            availableTokens+=additionalTokens;
+            return "Successfully added "+additionalTokens+" prompts"+" Now your total prompts remaining are:"+availableTokens;
         }
         else
         {
@@ -39,26 +45,35 @@ public class PersonalPlan extends AIModel
     //Method for userPrompts
     public String usePrompt(String promptText, int expectedLength)
     {
-    if (remainingPrompts <= 0)                            
-    {
+    if (availableTokens <= 0) {
         return "Error: Monthly quota exhausted.";
     }
-    if (super.calculateTokenUsage(promptText, expectedLength)==false)
-    {
-        return "Error: Context limit exceeded.";    
+    int tokensUsed;
+    try {
+        tokensUsed = super.calculateTokenUsage(promptText, expectedLength);
+    } 
+    catch (IllegalArgumentException e) {
+        return e.getMessage();
+    } 
+    catch (Exception e) {
+        return "Error: Context limit exceeded.";
     }
-    else
-    {
-    remainingPrompts -= 1;                                
-    return "Prompt accepted. Prompts remaining: " + remainingPrompts; 
+
+    if (tokensUsed > availableTokens) {
+        return "Error: Not enough tokens remaining.";
     }
+
+    availableTokens -= tokensUsed;
+
+    return "Prompt accepted. Tokens remaining: " + availableTokens;
     }
+    
     
     //Overriding the to string method
     @Override
     public String display()
     {
         return "Model Name:"+getModelName()+"\nPrice:"+getPrice()+"\nParameter Count:"+getParameterCount()
-        +"\nContext Window:"+getContextWindow()+"\nRemaning Prompts:"+getRemainingPrompts();
+        +"\nContext Window:"+getContextWindow()+"\nRemaning Prompts:"+getAvailableTokens();
     }
 }

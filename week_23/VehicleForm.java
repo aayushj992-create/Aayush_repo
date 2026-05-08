@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 
 public class VehicleForm extends JFrame implements ActionListener 
 {
@@ -15,7 +18,7 @@ public class VehicleForm extends JFrame implements ActionListener
 
     private JCheckBox carrierBox;
 
-    private JButton submitBtn, showInfoBtn, operateBtn, displayAllBtn, checkTypeBtn, clearBtn;
+    private JButton submitBtn, showInfoBtn, operateBtn, displayAllBtn, checkTypeBtn, clearBtn,loadBtn,clearAllBtn;
 
     private JTextArea displayArea;
 
@@ -80,6 +83,8 @@ public class VehicleForm extends JFrame implements ActionListener
         displayAllBtn = new JButton("Display All");
         checkTypeBtn = new JButton("Check Type");
         clearBtn = new JButton("Clear Form");
+        loadBtn=new JButton("Load Info");
+        clearAllBtn = new JButton("Clear All");
 
         btnPanel.add(submitBtn);
         btnPanel.add(showInfoBtn);
@@ -87,6 +92,9 @@ public class VehicleForm extends JFrame implements ActionListener
         btnPanel.add(displayAllBtn);
         btnPanel.add(checkTypeBtn);
         btnPanel.add(clearBtn);
+        btnPanel.add(loadBtn);
+        btnPanel.add(clearAllBtn);
+        loadBtn.addActionListener(e->loadFromFile());
 
         displayArea = new JTextArea(10, 70);
         displayArea.setEditable(false);
@@ -98,12 +106,50 @@ public class VehicleForm extends JFrame implements ActionListener
 
         submitBtn.addActionListener(this);
         clearBtn.addActionListener(e -> clearForm());
+        clearAllBtn.addActionListener(e -> clear());
         showInfoBtn.addActionListener(e -> showBasicInfo());
         operateBtn.addActionListener(e -> runVehicleOperation());
         displayAllBtn.addActionListener(e -> displayAllVehicles());
         checkTypeBtn.addActionListener(e -> checkVehicleType());
     }
-
+    public void clear()
+    {
+        vehicles.clear();
+    }
+    private void loadFromFile()
+    {
+        vehicles.clear();
+        try
+        {
+            
+            BufferedReader br=new BufferedReader(new FileReader("Vehicle.txt"));
+            String line;
+            while((line=br.readLine())!=null)
+            {
+                String[] d=line.split(",");
+                if(d[0].equals("Car"))
+                {
+                    vehicles.add(new Car(d[1],Integer.parseInt(d[2]),Integer.parseInt(d[3]),Double.parseDouble(d[4]),Double.parseDouble(d[5])));
+                }
+                else if(d[0].equals("Bike"))
+                {
+                    vehicles.add(new Bike(d[1],Integer.parseInt(d[2]),Boolean.parseBoolean(d[3]),Integer.parseInt(d[4]),Double.parseDouble(d[5])));
+                }
+            }
+            JOptionPane.showMessageDialog(this,"Information Loaded Successfully");
+    
+        }
+        catch(FileNotFoundException e)
+        {
+            
+        JOptionPane.showMessageDialog(this,"File not found");            
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(this,"File cannot be read");
+        }
+        
+    }
     private void showForm(String type) 
     {
         selectedType = type;
@@ -217,7 +263,7 @@ public class VehicleForm extends JFrame implements ActionListener
 
             vehicles.add(v);
             displayArea.append("Vehicle Added\n");
-
+            saveToFile();
             clearForm();
         } 
         catch(Exception ex) 
@@ -226,6 +272,32 @@ public class VehicleForm extends JFrame implements ActionListener
         }
     }
 
+    private void saveToFile()
+    {
+        try(FileWriter writer=new FileWriter("Vehicle.txt"))
+        {
+            for(Vehicle v: vehicles)
+            {
+                if(v instanceof Car)
+                {
+                    Car c=(Car) v;
+                    writer.write("Car"+","+c.getName()+","+c.getSpeed()+","+c.getSeats()+","+c.getFuelEfficiency()+","+c.getTankCapacity()+"\n");
+                }
+                else if(v instanceof Bike)
+                {
+                    Bike b=(Bike) v;
+                    writer.write("Bike"+","+b.getName()+","+b.getSpeed()+","+b.getHasCarrier()+","+b.getGearCount()+","+b.getDistance()+"\n");
+                }
+            }
+            String location=new File("Vehicle.txt").getAbsolutePath();
+            JOptionPane.showMessageDialog(this, location);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(this, "File cannot be created");
+        }
+    }
+    
     private void showBasicInfo() 
     {
         int index=getIndex();

@@ -12,7 +12,22 @@ public class Car extends Vehicle {
         this.fuelEfficiency = fuelEfficiency;
         this.tankCapacity= tankCapacity;
     }
-
+    
+    public int getSeats()
+    {
+        return this.seats;
+    }
+    
+    public double getFuelEfficiency()
+    {
+        return this.fuelEfficiency;
+    }
+    
+    public double getTankCapacity()
+    {
+        return this.tankCapacity;
+    }
+    
     // calculate max range based on tank capacity
     public double calculateRange() 
     {

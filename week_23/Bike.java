@@ -13,7 +13,21 @@ public class Bike extends Vehicle
         this.gearCount = gearCount;
         this.distance= distance;
     }
+    
+    public boolean getHasCarrier()
+    {
+        return this.hasCarrier;
+    }
+    
+    public int getGearCount()
+    {
+        return this.gearCount;
+    }
 
+    public double getDistance()
+    {
+        return this.distance;
+    }
     // calculate travel time for a distance
     public double calculateTravelTime() 
     {

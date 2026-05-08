@@ -25,6 +25,11 @@ public class ProPlan extends AIModel
        return this.slotsAvailable; 
     }
     
+    public void setSlots(int slotsAvailable)
+    {
+       this.slotsAvailable=slotsAvailable; 
+    }
+    
     //Method for Adding team meamber
     public String addTeamMember(String memberName)
     {
@@ -44,19 +49,27 @@ public class ProPlan extends AIModel
     public String removeTeamMember(String memberName)
     {
         slotsAvailable++;   
+        member.remove(memberName);
         return "Team member:"+memberName+" removed successfully."+"\nAvailable Slots Remaining:" + slotsAvailable; 
     }
     
-    public String usePrompt (String userText,int outputTokens)
+   public String usePrompt(String userText, int outputTokens)
     {
-        if (super.calculateTokenUsage(userText,outputTokens)==false)
+    int tokensUsed;
+
+    try {
+        tokensUsed = super.calculateTokenUsage(userText, outputTokens);
+    }
+    catch (IllegalArgumentException e)
     {
-        return "Error: Context limit exceeded."; 
+        return e.getMessage();
     }
-    else
-    {                        
-    return "Success your prompt was accepted.";
+    catch (Exception e)
+    {
+        return "Error: Context limit exceeded.";
     }
+
+    return "Success. Tokens used: " + tokensUsed;
     }
     
     //Overriding the to string method
