@@ -23,15 +23,16 @@ public class SubscriptionGUI extends JFrame
     
     private ArrayList<AIModel> plan = new ArrayList<>();
     
-    private JPanel panel, personalMainPanel, loginPanel, planPanel,proMainPanel;
+    private JPanel panel,loginPanel, planPanel,personalMainPanel,proMainPanel;
     private CardLayout cardLayout;
     
     private JButton resetBtn, loginBtn;
     
-    private DefaultTableModel teamTableModel;
-    private JTable teamTable;
-    
     private JPasswordField passField;
+    
+    private DefaultTableModel teamTableModel;
+    
+    private JTable teamTable;
     
     private JTextField personalModelField, personalPriceField, personalParameterField, personalTokenField,personalContextField, personalPromptField, personalResponseField,
             personalIndexField,availableTokenField,userField;
@@ -275,18 +276,18 @@ public class SubscriptionGUI extends JFrame
         availableTokenField = new JTextField(3);
         availableTokenField.setText("");
         availableTokenField.setEditable(false);
-        JButton buyPrompt=new JButton("Buy Tokens");
-        btnDesign(buyPrompt);
-        btnHover(buyPrompt);
-        buyPrompt.addActionListener(e->buyPrompt());
+        JButton buyTokens=new JButton("Buy Tokens");
+        btnDesign(buyTokens);
+        btnHover(buyTokens);
+        buyTokens.addActionListener(e->buyTokens());
         
-        buyPrompt.setPreferredSize(new Dimension(150,30));
+        buyTokens.setPreferredSize(new Dimension(150,30));
         
         
 
         rightPanel.add(availableToken);
         rightPanel.add(availableTokenField);
-        rightPanel.add(buyPrompt);
+        rightPanel.add(buyTokens);
         personalMainPanel.add(rightPanel, BorderLayout.EAST);
 
         /* ---------------- FOOTER (PERSONAL) ---------------- */
@@ -577,8 +578,8 @@ public class SubscriptionGUI extends JFrame
 
             try
             {
-                String promptText = personalPromptField.getText();
-                if (!promptText.matches("[a-zA-Z0-9 ]+"))
+                String promptText = personalPromptField.getText().trim();
+                if (!promptText.matches("^[A-Za-z0-9 ]+[.?]?$"))
                 {
                     throw new Exception("Prompt must contain only letters");
                 }
@@ -591,6 +592,7 @@ public class SubscriptionGUI extends JFrame
                 JOptionPane.showMessageDialog(this,personal.usePrompt(promptText, expectedLength));
 
                 availableTokenField.setText(Integer.toString(personal.getAvailableTokens()));
+                personalTokenField.setText(Integer.toString(personal.getAvailableTokens()));
             }
             catch (NumberFormatException e)
             {
@@ -609,8 +611,8 @@ public class SubscriptionGUI extends JFrame
 
             try
             {
-                String promptText = proPromptField.getText();
-                if (!promptText.matches("[a-zA-Z0-9 ]+"))
+                String promptText = proPromptField.getText().trim();
+                if (!promptText.matches("^[A-Za-z0-9 ]+[.?]?$"))
                 {
                     throw new Exception("Prompt must contain only letters");
                 }
@@ -636,7 +638,7 @@ public class SubscriptionGUI extends JFrame
     }
     }
     
-    public void buyPrompt()
+    public void buyTokens()
     {
     int idx = getIndex(personalIndexField);
     if (idx == -1)
@@ -670,7 +672,7 @@ public class SubscriptionGUI extends JFrame
             int updated = personal.getAvailableTokens() + buy;
             
             JOptionPane.showMessageDialog(this, personal.purchaseTokens(buy));
-
+            personalTokenField.setText(String.valueOf(updated));
             availableTokenField.setText(String.valueOf(updated));
         }
         catch (NumberFormatException e)
@@ -838,79 +840,7 @@ public class SubscriptionGUI extends JFrame
         proIndexField.setText("Index");
     }
     
-    public void personal(int idx)
-    {
-        if (idx == -1)
-        {
-            return;
-        }
-        AIModel ai = plan.get(idx);
-        if(ai instanceof PersonalPlan)
-        {
-            personalPromptField = new JTextField(20);
-            personalResponseField = new JTextField(20);
-            personalPromptBtn = new JButton();
-            personalCombine = createPromptPanel(personalPromptField,personalResponseField,personalPromptBtn,personalIndexField,centerPanel);
-            personalCheckType.setEnabled(false);
-        }
-        else
-        {
-            return;
-        }
-        if(ai instanceof PersonalPlan)
-        {
-        PersonalPlan personal = (PersonalPlan) ai;
-
-        personalModelField.setText(personal.getModelName());
-        personalParameterField.setText(String.valueOf(personal.getParameterCount()));
-        personalContextField.setText(String.valueOf(personal.getContextWindow()));
-        personalTokenField.setText(String.valueOf(personal.getAvailableTokens()));
-        availableTokenField.setText(String.valueOf(personal.getAvailableTokens()));
-
-        personalModelField.setEditable(false);
-        personalParameterField.setEditable(false);
-        personalContextField.setEditable(false);
-        personalTokenField.setEditable(false);
-        }
-    }
-    public void pro(int idx)
-    {
-        if (idx == -1)
-        {
-        return;
-        }
-        AIModel ai = plan.get(idx);
-        if(ai instanceof ProPlan)
-        {
-            proPromptField = new JTextField(20);
-            proResponseField = new JTextField(20);
-            proPromptBtn = new JButton();
-            proCombine = createPromptPanel(proPromptField,proResponseField,proPromptBtn,proIndexField,proCenterPanel);
-            proCheckType.setEnabled(false);
-        }
-        else 
-        {
-            return;
-        }
-
-       if(ai instanceof ProPlan)
-        {
-        ProPlan pro = (ProPlan) ai;
-
-        proModelField.setText(pro.getModelName());
-        proParameterField.setText(String.valueOf(pro.getParameterCount()));
-        proContextField.setText(String.valueOf(pro.getContextWindow()));
-        proSlotField.setText(String.valueOf(pro.getSlots()));
-        slotsRemainingField.setText(String.valueOf(pro.getSlots()));
-
-        proModelField.setEditable(false);
-        proParameterField.setEditable(false);
-        proContextField.setEditable(false);
-        proSlotField.setEditable(false);
-        }
-    }
-    
-    public JPanel createPromptPanel(JTextField promptField,JTextField responseField,JButton promptBtn,JTextField indexField,JPanel parentPanel)
+       public  JPanel createPromptPanel(JTextField promptField,JTextField responseField,JButton promptBtn,JTextField indexField,JPanel parentPanel)
         {
         JPanel combine = new JPanel();
         combine.setLayout(new BoxLayout(combine, BoxLayout.Y_AXIS));
@@ -957,9 +887,78 @@ public class SubscriptionGUI extends JFrame
         return combine;
     }
     
+    public void personalPromptDisplay(int idx)
+    {
+        if (idx == -1)
+        {
+            return;
+        }
+        AIModel ai = plan.get(idx);
+        if(ai instanceof PersonalPlan)
+        {
+            personalPromptField = new JTextField(20);
+            personalResponseField = new JTextField(20);
+            personalPromptBtn = new JButton();
+            personalCombine = createPromptPanel(personalPromptField,personalResponseField,personalPromptBtn,personalIndexField,centerPanel);
+            personalCheckType.setEnabled(false);
+        }
+        else
+        {
+            return;
+        }
+        if(ai instanceof PersonalPlan)
+        {
+        PersonalPlan personal = (PersonalPlan) ai;
 
+        personalModelField.setText(personal.getModelName());
+        personalParameterField.setText(String.valueOf(personal.getParameterCount()));
+        personalContextField.setText(String.valueOf(personal.getContextWindow()));
+        personalTokenField.setText(String.valueOf(personal.getAvailableTokens()));
+        availableTokenField.setText(String.valueOf(personal.getAvailableTokens()));
 
- 
+        personalModelField.setEditable(false);
+        personalParameterField.setEditable(false);
+        personalContextField.setEditable(false);
+        personalTokenField.setEditable(false);
+        }
+    }
+    public void proPromptDisplay(int idx)
+    {
+        if (idx == -1)
+        {
+        return;
+        }
+        AIModel ai = plan.get(idx);
+        if(ai instanceof ProPlan)
+        {
+            proPromptField = new JTextField(20);
+            proResponseField = new JTextField(20);
+            proPromptBtn = new JButton();
+            proCombine = createPromptPanel(proPromptField,proResponseField,proPromptBtn,proIndexField,proCenterPanel);
+            proCheckType.setEnabled(false);
+        }
+        else 
+        {
+            return;
+        }
+
+       if(ai instanceof ProPlan)
+        {
+        ProPlan pro = (ProPlan) ai;
+
+        proModelField.setText(pro.getModelName());
+        proParameterField.setText(String.valueOf(pro.getParameterCount()));
+        proContextField.setText(String.valueOf(pro.getContextWindow()));
+        proSlotField.setText(String.valueOf(pro.getSlots()));
+        slotsRemainingField.setText(String.valueOf(pro.getSlots()));
+
+        proModelField.setEditable(false);
+        proParameterField.setEditable(false);
+        proContextField.setEditable(false);
+        proSlotField.setEditable(false);
+        }
+    }
+     
     public void proCheckType(JTextField field)
     {
         int idx = getIndex(field);
@@ -970,16 +969,12 @@ public class SubscriptionGUI extends JFrame
             if(ai instanceof ProPlan)
             {
                 JOptionPane.showMessageDialog(this, "Pro Plan");
-                pro(idx);
+                proPromptDisplay(idx);
             }
             else if(ai instanceof PersonalPlan)
             {
                 JOptionPane.showMessageDialog(this, "Personal Plan");
                
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(this,"Unknown Plan Type");
             }
         }
     }
@@ -998,11 +993,7 @@ public class SubscriptionGUI extends JFrame
             else if(ai instanceof PersonalPlan)
             {
                 JOptionPane.showMessageDialog(this, "Personal Plan");
-                personal(idx);
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(this,"Unknown Plan Type");
+                personalPromptDisplay(idx);
             }
         }
     }
@@ -1075,7 +1066,7 @@ public class SubscriptionGUI extends JFrame
 
     public void addTeamMember()
     {
-    String name = proMemberField.getText();
+    String name = proMemberField.getText().trim();
 
     if(name.equals("Enter Name") || name.isEmpty())
     {
@@ -1119,7 +1110,7 @@ public class SubscriptionGUI extends JFrame
     
    public void removeTeamMember()
     {
-    String name = proMemberField.getText();
+    String name = proMemberField.getText().trim();
 
     if(name.equals("Enter Name") || name.isEmpty())
     {
@@ -1171,11 +1162,11 @@ public class SubscriptionGUI extends JFrame
     
     public void addPersonalMember()
     {
-        String name = personalModelField.getText();
-        String price = personalPriceField.getText();
-        String parameter = personalParameterField.getText();
-        String context = personalContextField.getText();
-        String availableTokens = personalTokenField.getText();
+        String name = personalModelField.getText().trim();
+        String price = personalPriceField.getText().trim();
+        String parameter = personalParameterField.getText().trim();
+        String context = personalContextField.getText().trim();
+        String availableTokens = personalTokenField.getText().trim();
         try
         {
 
@@ -1218,11 +1209,11 @@ public class SubscriptionGUI extends JFrame
 
     public void addProMember()
     {
-        String name = proModelField.getText();
-        String price = proPriceField.getText();
-        String parameter = proParameterField.getText();
-        String context = proContextField.getText();
-        String slots = proSlotField.getText();
+        String name = proModelField.getText().trim();
+        String price = proPriceField.getText().trim();
+        String parameter = proParameterField.getText().trim();
+        String context = proContextField.getText().trim();
+        String slots = proSlotField.getText().trim();
 
         try
         {

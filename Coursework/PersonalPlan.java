@@ -22,7 +22,7 @@ public class PersonalPlan extends AIModel
        return this.availableTokens; 
     }
     
-    public void setavailbaleTokens(int availableTokens)
+    public void setavailableTokens(int availableTokens)
     {
         this.availableTokens=availableTokens;
     }

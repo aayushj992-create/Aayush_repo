@@ -59,7 +59,7 @@ public class ProPlan extends AIModel
 
     try {
         tokensUsed = super.calculateTokenUsage(userText, outputTokens);
-    }
+    }   
     catch (IllegalArgumentException e)
     {
         return e.getMessage();
